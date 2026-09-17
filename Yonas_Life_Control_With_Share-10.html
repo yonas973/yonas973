@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1f6feb">
+<title>Yonas Life Control</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#17202a}
+header{background:#1f6feb;color:white;padding:22px 18px 18px;position:sticky;top:0;z-index:5}
+h1{margin:0;font-size:24px}.sub{opacity:.9;margin-top:5px;font-size:14px}
+main{max-width:680px;margin:auto;padding:14px 14px 90px}
+.card{background:white;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #0000000d}
+h2{font-size:18px;margin:0 0 12px}
+label{display:block;margin:10px 0;padding:11px;border-radius:10px;background:#f7f8fa}
+input[type=checkbox]{width:20px;height:20px;vertical-align:middle;margin-right:10px}
+input[type=text],input[type=number],textarea,select{width:100%;padding:11px;border:1px solid #ccd3da;border-radius:10px;font-size:16px;background:white}
+textarea{min-height:80px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:12px;padding:13px;font-size:16px;font-weight:bold;background:#1f6feb;color:white}
+button.secondary{background:#e9eef5;color:#17202a}
+.progress{height:12px;background:#e3e7eb;border-radius:10px;overflow:hidden;margin-top:10px}
+.bar{height:100%;background:#1f6feb;width:0}
+.small{font-size:13px;color:#66727d}
+.score{font-size:30px;font-weight:bold}
+.nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;padding:10px;display:flex;justify-content:center;gap:8px;z-index:10}
+.nav button{font-size:13px;padding:10px 14px}
+.danger{color:#b42318}
+</style>
+</head>
+<body>
+<header>
+  <h1>YONAS — Life Control</h1>
+  <div class="sub">Daily Recovery • Time • Study • Money</div>
+</header>
+
+<main>
+<section class="card">
+  <h2>📅 Today</h2>
+  <input id="date" type="date">
+  <div style="margin-top:12px"><b>Daily progress</b><div class="progress"><div id="bar" class="bar"></div></div>
+  <div class="small" id="progressText">0% complete</div></div>
+</section>
+
+<section class="card">
+<h2>✅ Daily Checklist</h2>
+<div id="checks">
+<label><input type="checkbox">Medication as prescribed</label>
+<label><input type="checkbox">Nicotine gum as prescribed</label>
+<label><input type="checkbox">Alcohol — followed my medical plan</label>
+<label><input type="checkbox">Khat — followed my plan</label>
+<label><input type="checkbox">Smoking — followed my quit/reduction plan</label>
+<label><input type="checkbox">Gym or walking</label>
+<label><input type="checkbox">English / WEI</label>
+<label><input type="checkbox">Full Stack Programming</label>
+<label><input type="checkbox">TryHackMe / Cybersecurity</label>
+<label><input type="checkbox">Family / quality time</label>
+<label><input type="checkbox">Personal time used positively</label>
+<label><input type="checkbox">Money spending recorded</label>
+</div>
+</section>
+
+<section class="card">
+<h2>🧠 Craving & Triggers</h2>
+<div class="row">
+<div><span class="small">Craving (0–10)</span><input id="craving" type="number" min="0" max="10"></div>
+<div><span class="small">Cigarettes today</span><input id="cigs" type="number" min="0"></div>
+</div>
+<div style="margin-top:10px"><span class="small">Khat</span>
+<select id="khat"><option value="">Select</option><option>No</option><option>Yes</option></select></div>
+<div style="margin-top:10px"><span class="small">Alcohol</span>
+<select id="alcohol"><option value="">Select</option><option>No</option><option>Yes / followed medical plan</option></select></div>
+<div style="margin-top:10px"><span class="small">Main trigger</span><input id="trigger" type="text"></div>
+<div style="margin-top:10px"><span class="small">What helped me?</span><textarea id="helped"></textarea></div>
+</section>
+
+<section class="card">
+<h2>⏱️ How I Spent My Time</h2>
+<div class="row">
+<div>Recovery/substance management<input id="tRecovery" type="number" min="0" step=".5" placeholder="hours"></div>
+<div>Gym/walking<input id="tGym" type="number" min="0" step=".5" placeholder="hours"></div>
+<div>Full Stack<input id="tFull" type="number" min="0" step=".5" placeholder="hours"></div>
+<div>TryHackMe<input id="tTry" type="number" min="0" step=".5" placeholder="hours"></div>
+<div>English/WEI<input id="tEnglish" type="number" min="0" step=".5" placeholder="hours"></div>
+<div>Family<input id="tFamily" type="number" min="0" step=".5" placeholder="hours"></div>
+<div>Personal/healthy time<input id="tPersonal" type="number" min="0" step=".5" placeholder="hours"></div>
+<div>Idle/unplanned<input id="tIdle" type="number" min="0" step=".5" placeholder="hours"></div>
+</div>
+</section>
+
+<section class="card">
+<h2>💰 Money Control</h2>
+<div class="row">
+<div>Daily limit<input id="limit" type="number" min="0" step="1"></div>
+<div>Total spent<input id="spent" type="number" min="0" step="1"></div>
+<div>Essential<input id="essential" type="number" min="0"></div>
+<div>Non-essential<input id="nonessential" type="number" min="0"></div>
+</div>
+</section>
+
+<section class="card">
+<h2>🌱 Today's Reflection</h2>
+<div><span class="small">Today's achievement</span><textarea id="achievement"></textarea></div>
+<div style="margin-top:10px"><span class="small">Tomorrow's goal</span><textarea id="goal"></textarea></div>
+</section>
+
+<section class="card">
+<h2>💾 Save Your Day</h2>
+<p class="small">Your entries are saved on this phone/browser. Use Export to keep a backup.</p>
+<div class="btns">
+<button onclick="saveDay()">Save</button>
+<button onclick="shareProgress()">📤 Share Daily Progress</button>
+<button class="secondary" onclick="exportData()">Export</button>
+<button class="secondary" onclick="importData()">Import</button>
+<button class="secondary" onclick="clearForm()">Clear</button>
+</div>
+<p id="status" class="small"></p>
+</section>
+
+<section class="card">
+<h2>🆘 Craving Tool</h2>
+<p><b>DELAY 10 min → DRINK water → MOVE if allowed → REPLACE → RECORD</b></p>
+<p class="small">For alcohol withdrawal or severe symptoms, follow your medical plan and seek urgent medical care when needed.</p>
+</section>
+</main>
+
+<div class="nav">
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})">🏠 Today</button>
+<button onclick="document.getElementById('checks').scrollIntoView({behavior:'smooth'})">✅ Checklist</button>
+<button onclick="document.querySelector('#limit').scrollIntoView({behavior:'smooth'})">💰 Money</button>
+</div>
+
+<script>
+const ids=['date','craving','cigs','khat','alcohol','trigger','helped','tRecovery','tGym','tFull','tTry','tEnglish','tFamily','tPersonal','tIdle','limit','spent','essential','nonessential','achievement','goal'];
+const today=()=>new Date().toISOString().slice(0,10);
+document.getElementById('date').value=today();
+
+function key(){return 'yonas_'+document.getElementById('date').value}
+function collect(){
+ let d={};
+ ids.forEach(id=>d[id]=document.getElementById(id).value);
+ d.checks=[...document.querySelectorAll('#checks input')].map(x=>x.checked);
+ return d;
+}
+function fill(d){
+ ids.forEach(id=>{if(d[id]!==undefined)document.getElementById(id).value=d[id]});
+ if(d.checks)document.querySelectorAll('#checks input').forEach((x,i)=>x.checked=!!d.checks[i]);
+ update();
+}
+function saveDay(){
+ localStorage.setItem(key(),JSON.stringify(collect()));
+ document.getElementById('status').textContent='Saved on this phone ✓';
+}
+function loadDay(){
+ let d=localStorage.getItem(key()); if(d) fill(JSON.parse(d)); else update();
+}
+function clearForm(){
+ if(!confirm('Clear today’s entries?'))return;
+ document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(x=>x.value='');
+ document.querySelectorAll('select').forEach(x=>x.value='');
+ document.querySelectorAll('#checks input').forEach(x=>x.checked=false);
+ update();
+}
+function update(){
+ let c=[...document.querySelectorAll('#checks input')], n=c.filter(x=>x.checked).length;
+ let p=Math.round(n/c.length*100);
+ document.getElementById('bar').style.width=p+'%';
+ document.getElementById('progressText').textContent=p+'% checklist complete ('+n+'/'+c.length+')';
+}
+function shareProgress(){
+ let d=collect();
+ let checked=d.checks.filter(Boolean).length;
+ let total=d.checks.length;
+ let p=Math.round(checked/total*100);
+ let msg =
+`YONAS — DAILY PROGRESS
+Date: ${d.date || new Date().toLocaleDateString()}
+
+Checklist: ${p}% (${checked}/${total})
+
+Cigarettes: ${d.cigs || "Not recorded"}
+Khat: ${d.khat || "Not recorded"}
+Alcohol: ${d.alcohol || "Not recorded"}
+Craving: ${d.craving || "Not recorded"}/10
+
+Main trigger: ${d.trigger || "None recorded"}
+What helped: ${d.helped || "Not recorded"}
+
+Time:
+Recovery: ${d.tRecovery || 0}h
+Gym/walking: ${d.tGym || 0}h
+Full Stack: ${d.tFull || 0}h
+TryHackMe: ${d.tTry || 0}h
+English/WEI: ${d.tEnglish || 0}h
+Family: ${d.tFamily || 0}h
+Personal time: ${d.tPersonal || 0}h
+Idle/unplanned: ${d.tIdle || 0}h
+
+Money:
+Daily limit: ${d.limit || 0}
+Spent: ${d.spent || 0}
+Essential: ${d.essential || 0}
+Non-essential: ${d.nonessential || 0}
+
+Achievement: ${d.achievement || "Not recorded"}
+Tomorrow's goal: ${d.goal || "Not recorded"}`;
+
+ if(navigator.share){
+   navigator.share({title:"Yonas Daily Progress",text:msg}).catch(()=>{});
+ }else{
+   navigator.clipboard.writeText(msg).then(()=>alert("Progress copied. Paste it into your message."));
+ }
+}
+function exportData(){
+ let blob=new Blob([JSON.stringify({date:document.getElementById('date').value,data:collect()},null,2)],{type:'application/json'});
+ let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Yonas_Life_Control_Backup.json';a.click();
+}
+function importData(){
+ let i=document.createElement('input');i.type='file';i.accept='.json';
+ i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);fill(x.data||x);document.getElementById('status').textContent='Imported ✓'}catch(e){alert('Invalid backup file')}};r.readAsText(i.files[0])};i.click();
+}
+document.querySelectorAll('#checks input').forEach(x=>x.addEventListener('change',update));
+document.getElementById('date').addEventListener('change',loadDay);
+loadDay();
+</script>
+</body>
+</html>
